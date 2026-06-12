@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+  /* Warna Merah Utama Sangga Buana */
+  --color-brandred-50: #fdf2f2;
+  --color-brandred-100: #fbe5e6;
+  --color-brandred-200: #f7c0c2;
+  --color-brandred-300: #f19194;
+  --color-brandred-400: #e6565b;
+  --color-brandred-500: #C1121F;
+  --color-brandred-600: #a30f1a;
+  --color-brandred-700: #7d0b13;
+  --color-brandred-800: #53070d;
+  --color-brandred-900: #310408;
+  --color-brandred-950: #1e0205;
+
+  /* Warna Biru Tua Utama Sangga Buana */
+  --color-brandblue-50: #e6ebef;
+  --color-brandblue-100: #ccd6df;
+  --color-brandblue-200: #99adc0;
+  --color-brandblue-300: #6683a0;
+  --color-brandblue-400: #335a81;
+  --color-brandblue-500: #003049;
+  --color-brandblue-600: #00293e;
+  --color-brandblue-700: #002031;
+  --color-brandblue-800: #001723;
+  --color-brandblue-900: #000e16;
+  --color-brandblue-950: #00090e;
+
+  /* Font Default Website */
+  --font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
+}
