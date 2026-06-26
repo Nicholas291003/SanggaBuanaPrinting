@@ -75,7 +75,19 @@
 
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-5">
                     <h3 class="text-sm font-black text-sanggablue flex items-center gap-2 border-b border-slate-100 pb-3">
-                        <i class="fa-solid fa-file-arrow-up text-sanggared"></i> 2. Berkas Desain
+                        <i class="fa-solid fa-map-location-dot text-sanggared"></i> 2. Alamat Pengiriman
+                    </h3>
+                    
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Alamat Lengkap Penerima <span class="text-sanggared">*</span></label>
+                        <textarea name="shipping_address" rows="3" required class="w-full bg-slate-50 border border-slate-200 text-sanggablue text-sm font-bold rounded-xl px-4 py-3 focus:ring-1 focus:ring-sanggared focus:border-sanggared outline-none transition-all placeholder:text-slate-300 font-medium" placeholder="Contoh: Jl. Raya ITS, Sukolilo, Surabaya...">{{ old('shipping_address', Auth::user()->address ?? '') }}</textarea>
+                        <p class="text-[10px] text-slate-400 font-bold">*Alamat yang Anda masukkan di sini akan otomatis tersimpan/diperbarui pada profil Anda.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-5">
+                    <h3 class="text-sm font-black text-sanggablue flex items-center gap-2 border-b border-slate-100 pb-3">
+                        <i class="fa-solid fa-file-arrow-up text-sanggared"></i> 3. Berkas Desain
                     </h3>
                     
                     <div class="relative border-2 border-dashed border-slate-300 rounded-2xl hover:bg-slate-50 hover:border-sanggared transition-all text-center group cursor-pointer overflow-hidden min-h-[220px] flex flex-col items-center justify-center p-6">
@@ -148,7 +160,7 @@
                     </div>
                 </div>
             </div>
-            
+    
         </form>
     </div>
 </div>

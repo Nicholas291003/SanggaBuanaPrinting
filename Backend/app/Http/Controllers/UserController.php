@@ -38,11 +38,18 @@ class UserController extends Controller
             'product_id'  => 'required|exists:products,id',
             'qty'         => 'required|integer|min:1',
             'variants'    => 'nullable|string',
-            'file_design' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:20480', 
+            'file_design' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:20480',
+            'shipping_address' => 'required|string|min:10',
         ]);
 
         $product = Product::with(['tiers', 'variants'])->findOrFail($request->product_id);
         $user = Auth::user();
+
+        // OTOMATIS UPDATE PROFIL USER: Jika alamat diisi/diubah saat checkout, simpan ke profil
+        if ($request->shipping_address !== $user->address) {
+            $user->address = $request->shipping_address;
+            $user->save();
+        }
 
         // 2. Kalkulasi Harga Dasar (Berdasarkan Kuantitas / Tiering Grosir)
         $qty = $request->qty;
@@ -89,6 +96,7 @@ class UserController extends Controller
             'customer_email' => $user->email,
             'service_name'   => $serviceDetail,
             'total_price'    => $grandTotal,
+            'shipping_address' => $request->shipping_address,
             'status'         => 'Dalam Antrian',
         ]);
 
@@ -232,10 +240,12 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'address' => 'nullable|string',
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->address = $request->address;
 
         // Validasi pengisian perubahan password baru jika kolom diisi oleh user
         if ($request->filled('password')) {

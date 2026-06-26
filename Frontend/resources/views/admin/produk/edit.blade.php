@@ -40,6 +40,16 @@
         </div>
 
         <div>
+          <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Harga Dasar Satuan (1 Pcs) <span class="text-sanggared">*</span></label>
+          <div class="relative">
+            <span class="absolute left-4 top-3 text-xs font-bold text-slate-400">Rp</span>
+            <input type="number" name="base_price" value="{{ (int)$product->base_price }}" required class="w-full pl-10 pr-4 py-3 text-xs rounded-xl border border-slate-200 focus:border-sanggablue focus:outline-none bg-slate-50/50 text-sanggablue font-bold">
+          </div>
+        </div>
+        <div>
+          <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Kategori <span class="text-sanggared">*</span></label>
+
+        <div>
           <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Kategori <span class="text-sanggared">*</span></label>
           <select name="category" required class="w-full px-4 py-3 text-xs rounded-xl border border-slate-200 focus:border-sanggablue focus:outline-none bg-slate-50/50 text-sanggablue font-bold cursor-pointer">
             <option value="">-- Pilih Kategori --</option>

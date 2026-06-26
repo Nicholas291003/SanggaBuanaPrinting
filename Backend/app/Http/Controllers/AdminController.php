@@ -116,6 +116,7 @@ class AdminController extends Controller
         // Validasi Data
         $request->validate([
             'name'        => 'required|string|max:255',
+            'base_price'  => 'nullable|numeric',
             'category'    => 'required|string',
             'description' => 'required|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -132,13 +133,11 @@ class AdminController extends Controller
         // Simpan Foto
         $imagePath = $request->file('image')->store('products', 'public');
 
-        // Ambil harga termurah dari array tier_price untuk dijadikan base_price
-        $basePrice = min($request->tier_price);
-
+        
         // Simpan Data Produk Utama
         $product = Product::create([
             'name'        => $request->name,
-            'base_price'  => $basePrice,
+            'base_price'  => $request->base_price,
             'category'    => $request->category,
             'description' => $request->description,
             'image_path'  => $imagePath,
@@ -218,6 +217,7 @@ class AdminController extends Controller
         // Validasi Data Update 
         $request->validate([
             'name'         => 'required|string|max:255',
+            'base_price'   => 'nullable|numeric',
             'category'     => 'required|string',
             'description'  => 'required|string',
             'image'        => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -241,14 +241,11 @@ class AdminController extends Controller
             }
             $imagePath = $request->file('image')->store('products', 'public');
         }
-
-        // Kalkulasi Ulang Harga Termurah
-        $basePrice = min($request->tier_price);
-
+        
         // Update Tabel Utama Produk
         $product->update([
             'name'        => $request->name,
-            'base_price'  => $basePrice,
+            'base_price'  => $request->base_price,
             'category'    => $request->category,
             'description' => $request->description,
             'image_path'  => $imagePath,

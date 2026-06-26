@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('total_price', 12, 2);
             $table->enum('status', ['Dalam Antrian', 'Sedang Diproses', 'Selesai', 'Siap Diambil', 'Siap Dikirim','Dibatalkan'])->default('Dalam Antrian');
             $table->string('file_path')->nullable();
+            $table->text('shipping_address')->nullable();
             $table->string('notes')->nullable();
             $table->timestamps();
         });

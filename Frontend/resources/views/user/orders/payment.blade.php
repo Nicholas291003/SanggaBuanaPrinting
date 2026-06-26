@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-slate-50 min-h-screen py-10" x-data="{ openCategory: null }">
+<div class="bg-slate-50 min-h-screen py-10" x-data="{ openCategory: null, selectedMethod: null }">
     <div class="max-w-5xl mx-auto px-4 md:px-6">
         
         <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 p-6 rounded-3xl mb-8 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm text-center md:text-left">
             <div>
                 <h2 class="text-lg font-black tracking-tight mb-1">Pesanan Anda Berhasil Diterima! <i class="fa-solid fa-party-horn ml-1"></i></h2>
-                <p class="text-xs font-medium">Berkas desain telah masuk ke sistem. Silakan lakukan pembayaran agar pesanan segera diproses.</p>
+                <p class="text-xs font-medium">Berkas desain telah masuk ke sistem. Silakan pilih metode pembayaran dan lakukan transfer.</p>
             </div>
             <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-xl shrink-0">
                 <i class="fa-solid fa-check-double"></i>
@@ -73,9 +73,17 @@
                             <div x-show="openCategory === '{{ $kategori }}'" x-collapse x-cloak>
                                 <div class="p-5 border-t border-slate-100 space-y-4 bg-white">
                                     @foreach($metodeList as $metode)
-                                        <div class="p-4 border border-slate-100 rounded-xl bg-slate-50 flex flex-col sm:flex-row items-center sm:justify-between gap-4 text-center sm:text-left">
+                                        
+                                        <div @click="selectedMethod = {{ $metode->id }}" 
+                                             :class="selectedMethod === {{ $metode->id }} ? 'border-emerald-500 bg-emerald-50 shadow-md ring-2 ring-emerald-100' : 'border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300'"
+                                             class="p-4 border rounded-xl flex flex-col sm:flex-row items-center sm:justify-between gap-4 text-center sm:text-left cursor-pointer transition-all relative overflow-hidden group">
                                             
-                                            <div class="flex-grow">
+                                            <div class="absolute top-0 right-0 p-3 pointer-events-none">
+                                                <i class="fa-solid fa-circle-check text-2xl transition-all duration-300" 
+                                                   :class="selectedMethod === {{ $metode->id }} ? 'text-emerald-500 scale-100 opacity-100' : 'text-slate-300 scale-75 opacity-0 group-hover:opacity-50'"></i>
+                                            </div>
+
+                                            <div class="flex-grow pr-8">
                                                 <span class="block text-xs font-black text-sanggablue uppercase">{{ $metode->name }}</span>
                                                 @if($metode->account_number)
                                                     <span class="block font-mono text-lg font-bold text-slate-600 mt-1 tracking-wider select-all">{{ $metode->account_number }}</span>
@@ -86,12 +94,13 @@
                                             </div>
 
                                             @if($metode->qr_image)
-                                                <div class="w-32 h-32 bg-white p-2 rounded-xl shadow-sm border border-slate-200 shrink-0">
+                                                <div class="w-32 h-32 bg-white p-2 rounded-xl shadow-sm border border-slate-200 shrink-0 relative z-10">
                                                     <img src="{{ asset('storage/' . $metode->qr_image) }}" class="w-full h-full object-cover rounded-lg">
                                                 </div>
                                             @endif
                                             
                                         </div>
+
                                     @endforeach
                                 </div>
                             </div>
@@ -105,12 +114,22 @@
                     @endforelse
                 </div>
 
-                <div class="mt-10 pt-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
-                    <p class="text-[10px] text-slate-400 font-bold max-w-xs text-center sm:text-left">
-                        *Jika Anda sudah mentransfer, sistem atau admin kami akan segera memverifikasinya.
+                <div class="mt-10 pt-6 flex flex-col sm:flex-row gap-4 items-center justify-between border-t border-slate-200">
+                    <p class="text-[10px] font-bold max-w-xs text-center sm:text-left leading-relaxed">
+                        <span x-show="!selectedMethod" class="text-amber-500">
+                            *Silakan klik salah satu metode pembayaran di atas terlebih dahulu.
+                        </span>
+                        <span x-show="selectedMethod" x-cloak class="text-emerald-500">
+                            *Jika Anda sudah mentransfer ke rekening pilihan, silakan konfirmasi.
+                        </span>
                     </p>
-                    <a href="{{ route('user.order.index') }}" class="w-full sm:w-auto px-8 py-3.5 bg-sanggablue hover:bg-sanggared text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all text-center">
-                        Selesai & Cek Pesanan Saya
+                    
+                    <button x-show="!selectedMethod" disabled class="w-full sm:w-auto px-8 py-3.5 bg-slate-200 text-slate-400 font-black text-xs uppercase tracking-wider rounded-xl cursor-not-allowed text-center transition-all">
+                        Pilih Metode
+                    </button>
+
+                    <a x-show="selectedMethod" x-cloak href="{{ route('user.order.index') }}" class="w-full sm:w-auto px-8 py-3.5 bg-sanggablue hover:bg-sanggared text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all text-center flex items-center justify-center gap-2">
+                        Saya Sudah Transfer <i class="fa-solid fa-check-double text-sm"></i>
                     </a>
                 </div>
 

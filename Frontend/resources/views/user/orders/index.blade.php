@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+    // Menarik data nomor WhatsApp dinamis hasil input admin di database
+    $setting = \App\Models\CompanySetting::first();
+    $sosmed = collect($setting->social_media ?? []);
+    $waBaseUrl = $sosmed->firstWhere('platform', 'whatsapp')['url'] ?? 'https://wa.me/6281234567890';
+@endphp
+
 <div class="bg-slate-50 min-h-screen py-10" x-data="{ tab: 'keranjang' }">
     <div class="max-w-5xl mx-auto px-4 md:px-6">
         
@@ -92,14 +99,30 @@
                         {{ $order->status }}
                     </span>
                 </div>
+                
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
                         <span class="block text-sm font-bold text-slate-600">{{ $order->service_name }}</span>
                         <span class="block font-black text-sanggared text-xl mt-1">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
                     </div>
-                    <a href="{{ route('user.order.show', $order->id) }}" class="px-6 py-3 bg-slate-100 hover:bg-sanggared hover:text-white text-sanggablue font-black text-[10px] uppercase tracking-wider rounded-xl transition-all border border-slate-200 hover:border-sanggared">
-                        Rincian Pesanan
-                    </a>
+                    
+                    <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                        
+                        @php
+                            $nomorOrder = str_pad($order->id, 4, '0', STR_PAD_LEFT);
+                            $pesanWa = urlencode("Halo Admin Sangga Buana, saya ingin menanyakan status pesanan saya dengan Nomor Tagihan #ORD-{$nomorOrder}.");
+                            $separator = str_contains($waBaseUrl, '?') ? '&' : '?';
+                            $linkWaOrder = $waBaseUrl . $separator . "text=" . $pesanWa;
+                        @endphp
+
+                        <a href="{{ $linkWaOrder }}" target="_blank" class="px-5 py-3 bg-white hover:bg-emerald-50 text-emerald-600 font-black text-[10px] uppercase tracking-wider rounded-xl transition-all border border-emerald-200 hover:border-emerald-500 flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Tanya Admin
+                        </a>
+
+                        <a href="{{ route('user.order.show', $order->id) }}" class="px-5 py-3 bg-slate-100 hover:bg-sanggared hover:text-white text-sanggablue font-black text-[10px] uppercase tracking-wider rounded-xl transition-all border border-slate-200 hover:border-sanggared text-center">
+                            Rincian Pesanan
+                        </a>
+                    </div>
                 </div>
             </div>
             @empty
